@@ -3,9 +3,12 @@ class UsersController < ApplicationController
   
   def index
     @users = User.order(id: :desc).page(params[:page]).per(25)
+    @user = User.find(session[:user_id])
+
   end
 
   def show
+    
     @user = User.find(params[:id])
     @microposts = @user.microposts.order(id: :desc).page(params[:page])
     counts(@user)
@@ -43,12 +46,21 @@ class UsersController < ApplicationController
     @favoritings = @user.favoritings.page(params[:page])
     counts(@micropost)
   end
+  
   def favorites
     @micropost = Micropost.find(params[:id])
     @favorites = @micropost.favorites.page(params[:page])
     counts(@micropost)
   end
 
+  def likes
+    if logged_in?
+      @microposts = Micropost.all.page(params[:page]) #current_user.feed_microposts.order(id: :desc).page(params[:page])
+      
+      @user = User.find(params[:id])
+      counts(@user)
+    end
+  end
   private
 
   def user_params

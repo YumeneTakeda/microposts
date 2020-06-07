@@ -14,11 +14,13 @@ Rails.application.routes.draw do
       
       get :favoritings
       get :favorites
+      
+      get :likes
     end
   end
   
   resources :microposts, only: [:create, :destroy]
   resources :relationships, only: [:create, :destroy]
-  resources :favorites, only: [:index, :create, :destroy]
+  resources :favorites, only: [:create, :destroy]
 
 end
